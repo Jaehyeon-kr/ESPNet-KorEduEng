@@ -1,16 +1,19 @@
 # ESPNet-KorEduEng
-## Project Summary
-- Following are results of a study on the "Convergence and Open Sharing System" Project, supported by the Ministry of Education and National Research Foundation of Korea
-- This project aims to optimize a speech recognition model using ESPnet, improving performance based on the Librispeech, KorEduEng, and Gravo datasets.
-- We fine-tuned the LibriSpeech pretrained model with the KorEduEng dataset and applied beam search optimization, data augmentation, and hyperparameter tuning, reducing the Word Error Rate (WER) from 34.0% to 4.3%.
-- This document provides a detailed explanation of the step-by-step model improvement process and performance enhancement techniques.
-
 
 ## Project Summary
-- 본 과제(결과물)는 교육부와 한국연구재단의 재원으로 지원을 받아 수행된 첨단분야 혁신융합대학사업의 연구결과입니다
-- 이 프로젝트는 ESPnet을 활용한 음성 인식 모델 최적화를 목표로 하며, Librispeech, KorEduEng, Gravo 데이터셋을 기반으로 성능을 개선하였습니다.
-- 우리는 LibriSpeech 사전 학습 모델을 KorEduEng 데이터셋으로 Fine-Tuning하고, 빔 서치(Beam Search) 최적화, 데이터 증강, 하이퍼파라미터 튜닝을 적용하여 WER(단어 오류율)을 34.0%에서 4.3%로 감소시켰습니다.
+- The following results are from a study conducted as part of the "Convergence and Open Sharing System" Project, supported by the Ministry of Education and the National Research Foundation of Korea.
+- This project was awarded the grand prize (prize money: 3,000,000 KRW) at the 2024 Winter AI SCI Bootcamp, hosted by the AI Innovation Convergence University Project.
+- The project aims to optimize a speech recognition model using ESPnet, enhancing its performance on the Librispeech, KorEduEng, and Gravo datasets.
+- We fine-tuned the LibriSpeech pretrained model on the KorEduEng dataset and applied beam search optimization, data augmentation, and hyperparameter tuning, reducing the Word Error Rate (WER) from 34.0% to 4.3%.
+- This document provides a detailed explanation of the step-by-step model improvement process and the performance enhancement techniques applied.
+
+## 프로젝트 요약
+- 본 연구(결과물)는 교육부와 한국연구재단의 지원을 받아 수행된 첨단분야 혁신융합대학사업의 일환으로 진행된 연구 결과입니다.
+- 본 프로젝트는 인공지능혁신융합대학사업단 주최의 2024 동계 인공지능 SCI 부트캠프에서 대상(상금 300만원)을 수상하였으며, ESPnet을 활용한 음성 인식 모델 최적화를 목표로 진행되었습니다.
+- 본 연구는 Librispeech, KorEduEng, Gravo 데이터셋을 기반으로 음성 인식 모델의 성능을 향상시켰습니다.
+- LibriSpeech 사전 학습 모델을 KorEduEng 데이터셋으로 Fine-Tuning한 후, 빔 서치 최적화, 데이터 증강, 하이퍼파라미터 튜닝을 적용하여 단어 오류율(WER)을 34.0%에서 4.3%로 대폭 감소시켰습니다.
 - 이 문서는 단계별 모델 개선 과정과 성능 향상 기법을 상세히 설명합니다.
+
 
 ## Advance
 
