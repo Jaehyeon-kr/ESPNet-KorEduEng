@@ -17,10 +17,10 @@
 | Step            | Model                      | WER (%) | Explanation                                        |
 |-----------------|----------------------------|---------|----------------------------------------------------|
 | Baseline        | LibriSpeech Pretrained     | 33.7    | Zero-shot evaluation on the KorEduEng dataset      |
-| Fine-Tuning 1-0 | KorEduEng Fine-Tuning      | 16.1    | Fine-tuning on the KorEduEng dataset               |
-| Fine-Tuning 1-1 | KorEduEng Fine-Tuning      | 8.0     | Fine-tuning with parameter tuning (variant 1-1)    |
-| Fine-Tuning 1-2 | KorEduEng Fine-Tuning      | 7.9     | Fine-tuning with parameter tuning (variant 1-2)    |
-| Fine-Tuning 2   | Optimized KorEduEng Model  | 5.3     | Architecture adjustments & training optimizations  |
+| Fine-Tuning 1 | KorEduEng Fine-Tuning      | 16.1    | Fine-tuning on the KorEduEng dataset               |
+| Fine-Tuning 2 | KorEduEng Fine-Tuning      | 8.0     | Fine-tuning with parameter tuning (variant 2)    |
+| Fine-Tuning 3 | KorEduEng Fine-Tuning      | 7.9     | Fine-tuning with parameter tuning (variant 3)    |
+| Fine-Tuning 4   | Optimized KorEduEng Model  | 5.3     | Architecture adjustments & training optimizations  |
 | Final Model     | Hugging Face-based Model   | 4.3     | Fine-tuning using a powerful Hugging Face pretrained model |
 
 
@@ -38,7 +38,7 @@
 - Git hash: `6ddbdf3fd5ab113f2849104812df6e93a236130a`
 - ASR config: [conf/train_asr_conformer.yaml](conf/train_asr_conformer.yaml)
 - Decode config: [conf/decode_asr.yaml](conf/decode_asr.yaml)
-- Pretrained model: [https://huggingface.co/espnet/librispeech_multiblank_transducer_8421](https://huggingface.co/espnet/librispeech_multiblank_transducer_8421)
+
 
 ### WER 
 
@@ -77,10 +77,10 @@
 
 ### WER 
 
-|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Errl
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |decode_asr_asr_model_valid.acc.ave/test1|5692|151728|72.9|22.5|4.6|6.5|33.7|88.6|
 
-## Fine-Tuning 1-0
+## Fine-Tuning 1
 ## exp_ex1/asr_train_asr_conformer_raw_en_bpe5000
 - LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 16.1))
 - (LibriSpeech -> KorEduEng Test) BASELINE (WER 16.1)
@@ -97,25 +97,26 @@
 
 
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp
+- decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example
 ### WER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|151729|85.5|8.5|6.0|1.6|16.1|54.9|
+|test1Fix.example|5692|151729|85.5|8.5|6.0|1.6|16.1|54.9|
 
 ### CER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|828121|89.7|2.3|8.0|1.4|11.7|54.9|
+|test1Fix.example|5692|828121|89.7|2.3|8.0|1.4|11.7|54.9|
 ### TER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|186919|84.8|7.6|7.6|2.3|17.5|54.9|
+|test1Fix.example|5692|186919|84.8|7.6|7.6|2.3|17.5|54.9|
 
 
-## Fine-Tuning 1-1
+## Fine-Tuning 2
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp
 - LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 8.0))
 - (WRONG TEST FILE FIX ver1) (WER 8.0)
@@ -131,25 +132,25 @@
 - Pretrained model: `exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth`
 
 ### WER
-
+- decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|151729|93.6|4.9|1.5|1.6|8.0|28.5|
+|test1Fix.example|5692|151729|93.6|4.9|1.5|1.6|8.0|28.5|
 
 ### CER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|828121|96.4|1.5|2.0|1.5|5.1|28.5|
+|test1Fix.example|5692|828121|96.4|1.5|2.0|1.5|5.1|28.5|
 
 ### TER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|186919|92.9|4.4|2.7|1.9|9.0|28.5|
+|test1Fix.example|5692|186919|92.9|4.4|2.7|1.9|9.0|28.5|
 
 
-## Fine-Tuning 1-2
+## Fine-Tuning 3
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp (WER 7.9)
 - LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 7.9))
 - LM weight : 0.6 -> 0.8 Beamsize : 27 -> 60
@@ -163,29 +164,27 @@
 - Decode config:
 - Pretrained model: `exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth`
 
-### WER (test1 -> testFix.example) 
+### WER (test1 -> testFix.example)
+- decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave.250124_00/test1Fix.example 
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave.250124_00/test1Fix.example|5692|151729|93.6|4.8|1.7|1.4|7.9|29.1|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|151729|93.6|4.8|1.7|1.4|7.9|29.1|
+|test1Fix.example|5692|151729|93.6|4.8|1.7|1.4|7.9|29.1|
 
 ### CER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave.250124_00/test1Fix.example|5692|828121|96.3|1.5|2.2|1.4|5.1|29.1|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|828121|96.3|1.5|2.2|1.4|5.1|29.1|
+|test1Fix.example|5692|828121|96.3|1.5|2.2|1.4|5.1|29.1|
 
 ### TER
 
 |dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave.250124_00/test1Fix.example|5692|186919|92.9|4.2|2.9|1.8|8.9|29.1|
-|decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|186919|92.9|4.2|2.9|1.8|8.9|29.1|
+|test1Fix.example|5692|186919|92.9|4.2|2.9|1.8|8.9|29.1|
 
 
-## Fine-Tuning 2
+## Fine-Tuning 4
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp  
 - LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver2 (WER 5.3))
 - Epoch LM : 120 -> 250, ASR : 55 -> 80 , 'specaug' (x3 → x5), 'freq mask range' expansion
@@ -200,22 +199,22 @@
 - Pretrained model: `exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth`
 
 ### WER
-
-| Dataset                        | Snt  | Wrd   | Corr | Sub | Del | Ins | Err | S.Err |
-|--------------------------------|------|-------|------|-----|-----|-----|-----|-------|
-| ver3_maxepoch/test1Fix.example | 5692 | 151911| 95.6 | 3.6 | 0.9 | 0.9 | 5.3 | 26.5  |
+- ver3_maxepoch/test1Fix.example
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
+|---|---|---|---|---|---|---|---|---|
+| test1Fix.example | 5692 | 151911| 95.6 | 3.6 | 0.9 | 0.9 | 5.3 | 26.5  |
 
 ### CER
 
-| Dataset                        | Snt  | Wrd    | Corr | Sub | Del | Ins | Err | S.Err |
-|--------------------------------|------|--------|------|-----|-----|-----|-----|-------|
-| ver3_maxepoch/test1Fix.example | 5692 | 829099 | 97.8 | 1.0 | 1.2 | 0.9 | 3.1 | 26.5  |
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
+|---|---|---|---|---|---|---|---|---|
+| test1Fix.example | 5692 | 829099 | 97.8 | 1.0 | 1.2 | 0.9 | 3.1 | 26.5  |
 
 ### TER
 
-| Dataset                        | Snt  | Wrd    | Corr | Sub | Del | Ins | Err | S.Err |
-|--------------------------------|------|--------|------|-----|-----|-----|-----|-------|
-| ver3_maxepoch/test1Fix.example | 5692 | 187118 | 94.7 | 3.0 | 2.2 | 1.0 | 6.3 | 26.5  |
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
+|---|---|---|---|---|---|---|---|---|
+| test1Fix.example | 5692 | 187118 | 94.7 | 3.0 | 2.2 | 1.0 | 6.3 | 26.5  |
 
 
 
@@ -231,24 +230,24 @@
 - Git hash: `6ddbdf3fd5ab113f2849104812df6e93a236130a`
 - ASR config:  [conf/train_asr_conformer.yaml](conf/train_asr_conformer.yaml)
 - Decode config:
-- Pretrained model: `exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth`(exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth)
+- Pretrained model: `exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth`
  `https://github.com/espnet/espnet/tree/master/egs2/grabo/asr1`(https://github.com/espnet/espnet/tree/master/egs2/grabo/asr1)
 
 ## exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp
 ### WER
-
-| Dataset                                                                                         | Snt  | Wrd   | Corr | Sub | Del | Ins | Err | S.Err |
-|-----------------------------------------------------------------------------------------------|------|-------|------|-----|-----|-----|-----|-------|
-| decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example | 5692 | 151962 | 96.3 | 3.0 | 0.7 | 0.6 | 4.3 | 23.8  |
+-decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
+|---|---|---|---|---|---|---|---|---|
+|test1Fix.example | 5692 | 151962 | 96.3 | 3.0 | 0.7 | 0.6 | 4.3 | 23.8  |
 
 ### CER
 
-| Dataset                                                                                         | Snt  | Wrd    | Corr | Sub | Del | Ins | Err | S.Err |
-|-----------------------------------------------------------------------------------------------|------|--------|------|-----|-----|-----|-----|-------|
-| decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example | 5692 | 829379 | 98.3 | 0.8 | 0.9 | 0.7 | 2.4 | 23.8  |
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
+|---|---|---|---|---|---|---|---|---|
+|test1Fix.example | 5692 | 829379 | 98.3 | 0.8 | 0.9 | 0.7 | 2.4 | 23.8  |
 
 ### TER
 
-| Dataset                                                                                         | Snt  | Wrd   | Corr | Sub | Del | Ins | Err | S.Err |
-|-----------------------------------------------------------------------------------------------|------|-------|------|-----|-----|-----|-----|-------|
-| decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example | 5692 | 187150 | 95.8 | 2.5 | 1.6 | 0.7 | 4.8 | 23.8  |
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
+|---|---|---|---|---|---|---|---|---|
+|test1Fix.example | 5692 | 187150 | 95.8 | 2.5 | 1.6 | 0.7 | 4.8 | 23.8  |
