@@ -1,0 +1,961 @@
+# python3 -m espnet2.bin.asr_train --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram5000/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram5000/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump/raw/devFix.example/wav.scp,speech,sound --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape --resume true --init_param exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.best.pth --ignore_init_mismatch true --fold_length 80000 --output_dir exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp --config conf/train_asr_conformer.yaml --frontend_conf fs=16k --normalize=global_mvn --normalize_conf stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/wav.scp,speech,sound --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/text,text,text --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/text_shape.bpe --valid_data_path_and_name_and_type dump/raw/devFix.example/text,text,text --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/text_shape.bpe --ngpu 3 --multiprocessing_distributed True 
+# Started at Wed Jan 29 20:26:20 KST 2025
+#
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/bin/python3 /data/bootcamp2501/espnet/espnet2/bin/asr_train.py --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram5000/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram5000/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump/raw/devFix.example/wav.scp,speech,sound --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape --resume true --init_param exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.best.pth --ignore_init_mismatch true --fold_length 80000 --output_dir exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp --config conf/train_asr_conformer.yaml --frontend_conf fs=16k --normalize=global_mvn --normalize_conf stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/wav.scp,speech,sound --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/text,text,text --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/text_shape.bpe --valid_data_path_and_name_and_type dump/raw/devFix.example/text,text,text --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/text_shape.bpe --ngpu 3 --multiprocessing_distributed True
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+[seoultech:0/3] 2025-01-29 20:26:27,734 (asr:523) INFO: Vocabulary size: 5000
+[seoultech:0/3] 2025-01-29 20:26:29,319 (abs_task:1271) INFO: pytorch.version=2.1.0, cuda.available=True, cudnn.version=8902, cudnn.benchmark=False, cudnn.deterministic=True
+[seoultech:0/3] 2025-01-29 20:26:29,325 (abs_task:1272) INFO: Model structure:
+ESPnetASRModel(
+  (frontend): DefaultFrontend(
+    (stft): Stft(n_fft=512, win_length=512, hop_length=160, center=True, normalized=False, onesided=True)
+    (frontend): Frontend()
+    (logmel): LogMel(sr=16000, n_fft=512, n_mels=80, fmin=0, fmax=8000.0, htk=False)
+  )
+  (specaug): SpecAug(
+    (time_warp): TimeWarp(window=5, mode=bicubic)
+    (freq_mask): MaskAlongAxis(mask_width_range=[0, 30], num_mask=5, axis=freq)
+    (time_mask): MaskAlongAxis(mask_width_range=[0, 40], num_mask=10, axis=time)
+  )
+  (normalize): GlobalMVN(stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz, norm_means=True, norm_vars=True)
+  (encoder): ConformerEncoder(
+    (embed): Conv2dSubsampling(
+      (conv): Sequential(
+        (0): Conv2d(1, 512, kernel_size=(3, 3), stride=(2, 2))
+        (1): ReLU()
+        (2): Conv2d(512, 512, kernel_size=(3, 3), stride=(2, 2))
+        (3): ReLU()
+      )
+      (out): Sequential(
+        (0): Linear(in_features=9728, out_features=512, bias=True)
+        (1): RelPositionalEncoding(
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+    )
+    (encoders): MultiSequential(
+      (0): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (6): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (7): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (8): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (9): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (10): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (11): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (embed): Sequential(
+      (0): Embedding(5000, 512)
+      (1): PositionalEncoding(
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+    (output_layer): Linear(in_features=512, out_features=5000, bias=True)
+    (decoders): MultiSequential(
+      (0): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (criterion_att): LabelSmoothingLoss(
+    (criterion): KLDivLoss()
+  )
+  (ctc): CTC(
+    (ctc_lo): Linear(in_features=512, out_features=5000, bias=True)
+    (ctc_loss): CTCLoss()
+  )
+)
+
+Model summary:
+    Class Name: ESPnetASRModel
+    Total Number of model parameters: 116.15 M
+    Number of trainable parameters: 116.15 M (100.0%)
+    Size: 464.59 MB
+    Type: torch.float32
+[seoultech:0/3] 2025-01-29 20:26:29,325 (abs_task:1275) INFO: Optimizer:
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 0.0015
+    lr: 2e-08
+    maximize: False
+    weight_decay: 1e-06
+)
+[seoultech:0/3] 2025-01-29 20:26:29,325 (abs_task:1276) INFO: Scheduler: WarmupLR(warmup_steps=75000)
+[seoultech:0/3] 2025-01-29 20:26:29,325 (abs_task:1285) INFO: Saving the configuration in exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/config.yaml
+[seoultech:0/3] 2025-01-29 20:26:29,407 (abs_task:1346) INFO: Loading pretrained params from exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.best.pth
+[seoultech:0/3] 2025-01-29 20:26:30,966 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/3] 2025-01-29 20:26:36,490 (abs_task:1663) INFO: [train] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/trainFix.example_sp/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/trainFix.example_sp/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fbb41a239a0>)
+[seoultech:0/3] 2025-01-29 20:26:36,490 (abs_task:1664) INFO: [train] Batch sampler: NumElementsBatchSampler(N-batch=5876, batch_bins=50000000, sort_in_batch=descending, sort_batch=descending)
+[seoultech:0/3] 2025-01-29 20:26:36,491 (abs_task:1665) INFO: [train] mini-batch sizes summary: N-batch=5876, mean=115.4, min=14, max=575
+[seoultech:0/3] 2025-01-29 20:26:36,578 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/3] 2025-01-29 20:26:36,605 (abs_task:1663) INFO: [valid] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/devFix.example/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/devFix.example/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fbb41a45b80>)
+[seoultech:0/3] 2025-01-29 20:26:36,605 (abs_task:1664) INFO: [valid] Batch sampler: NumElementsBatchSampler(N-batch=52, batch_bins=50000000, sort_in_batch=descending, sort_batch=descending)
+[seoultech:0/3] 2025-01-29 20:26:36,605 (abs_task:1665) INFO: [valid] mini-batch sizes summary: N-batch=52, mean=109.5, min=12, max=388
+[seoultech:0/3] 2025-01-29 20:26:36,613 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/3] 2025-01-29 20:26:36,643 (abs_task:1663) INFO: [plot_att] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/devFix.example/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/devFix.example/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fbb4181c3d0>)
+[seoultech:0/3] 2025-01-29 20:26:36,643 (abs_task:1664) INFO: [plot_att] Batch sampler: UnsortedBatchSampler(N-batch=5693, batch_size=1, key_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape, 
+[seoultech:0/3] 2025-01-29 20:26:36,643 (abs_task:1665) INFO: [plot_att] mini-batch sizes summary: N-batch=3, mean=1.0, min=1, max=1
+[seoultech:0/3] 2025-01-29 20:26:37,620 (trainer:168) INFO: The training was resumed using exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/checkpoint.pth
+seoultech:2118354:2118354 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118354:2118354 [0] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2118354:2118354 [0] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2118354:2118354 [0] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2118354:2118354 [0] NCCL INFO cudaDriverVersion 12020
+NCCL version 2.18.5+cuda12.1
+[seoultech:0/3] 2025-01-29 20:26:38,718 (trainer:299) INFO: 27/87epoch started
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+seoultech:2118354:2118385 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118354:2118385 [0] NCCL INFO NET/IB : No device found.
+seoultech:2118354:2118385 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118354:2118385 [0] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2118354:2118385 [0] NCCL INFO Using network Socket
+seoultech:2118354:2118385 [0] NCCL INFO comm 0x2c542e40 rank 0 nranks 3 cudaDev 0 nvmlDev 0 busId 31000 commId 0x4b0e033879319a26 - Init START
+seoultech:2118354:2118385 [0] NCCL INFO Setting affinity for GPU 0 to 0f,ff000fff
+seoultech:2118354:2118385 [0] NCCL INFO NVLS multicast support is not available on dev 0
+seoultech:2118354:2118385 [0] NCCL INFO Channel 00/02 :    0   1   2
+seoultech:2118354:2118385 [0] NCCL INFO Channel 01/02 :    0   1   2
+seoultech:2118354:2118385 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1
+seoultech:2118354:2118385 [0] NCCL INFO P2P Chunksize set to 131072
+seoultech:2118354:2118385 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+seoultech:2118354:2118385 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+seoultech:2118354:2118385 [0] NCCL INFO Connected all rings
+seoultech:2118354:2118385 [0] NCCL INFO Connected all trees
+seoultech:2118354:2118385 [0] NCCL INFO threadThresholds 8/8/64 | 24/8/64 | 512 | 512
+seoultech:2118354:2118385 [0] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2118354:2118385 [0] NCCL INFO comm 0x2c542e40 rank 0 nranks 3 cudaDev 0 nvmlDev 0 busId 31000 commId 0x4b0e033879319a26 - Init COMPLETE
+seoultech:2118356:2118356 [2] NCCL INFO cudaDriverVersion 12020
+seoultech:2118356:2118356 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118356:2118356 [2] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2118356:2118356 [2] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2118356:2118356 [2] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2118356:2118387 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118356:2118387 [2] NCCL INFO NET/IB : No device found.
+seoultech:2118356:2118387 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118356:2118387 [2] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2118356:2118387 [2] NCCL INFO Using network Socket
+seoultech:2118356:2118387 [2] NCCL INFO comm 0x172f3760 rank 2 nranks 3 cudaDev 2 nvmlDev 2 busId b1000 commId 0x4b0e033879319a26 - Init START
+seoultech:2118356:2118387 [2] NCCL INFO Setting affinity for GPU 2 to fff0,00fff000
+seoultech:2118356:2118387 [2] NCCL INFO NVLS multicast support is not available on dev 2
+seoultech:2118356:2118387 [2] NCCL INFO Trees [0] -1/-1/-1->2->1 [1] -1/-1/-1->2->1
+seoultech:2118356:2118387 [2] NCCL INFO P2P Chunksize set to 131072
+seoultech:2118356:2118387 [2] NCCL INFO Channel 00 : 2[2] -> 0[0] via SHM/direct/direct
+seoultech:2118356:2118387 [2] NCCL INFO Channel 01 : 2[2] -> 0[0] via SHM/direct/direct
+seoultech:2118356:2118387 [2] NCCL INFO Connected all rings
+seoultech:2118356:2118387 [2] NCCL INFO Channel 00 : 2[2] -> 1[1] via SHM/direct/direct
+seoultech:2118356:2118387 [2] NCCL INFO Channel 01 : 2[2] -> 1[1] via SHM/direct/direct
+seoultech:2118356:2118387 [2] NCCL INFO Connected all trees
+seoultech:2118356:2118387 [2] NCCL INFO threadThresholds 8/8/64 | 24/8/64 | 512 | 512
+seoultech:2118356:2118387 [2] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2118356:2118387 [2] NCCL INFO comm 0x172f3760 rank 2 nranks 3 cudaDev 2 nvmlDev 2 busId b1000 commId 0x4b0e033879319a26 - Init COMPLETE
+seoultech:2118355:2118355 [1] NCCL INFO cudaDriverVersion 12020
+seoultech:2118355:2118355 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118355:2118355 [1] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2118355:2118355 [1] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2118355:2118355 [1] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2118355:2118386 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118355:2118386 [1] NCCL INFO NET/IB : No device found.
+seoultech:2118355:2118386 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2118355:2118386 [1] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2118355:2118386 [1] NCCL INFO Using network Socket
+seoultech:2118355:2118386 [1] NCCL INFO comm 0x2589d5b0 rank 1 nranks 3 cudaDev 1 nvmlDev 1 busId 4b000 commId 0x4b0e033879319a26 - Init START
+seoultech:2118355:2118386 [1] NCCL INFO Setting affinity for GPU 1 to 0f,ff000fff
+seoultech:2118355:2118386 [1] NCCL INFO NVLS multicast support is not available on dev 1
+seoultech:2118355:2118386 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0
+seoultech:2118355:2118386 [1] NCCL INFO P2P Chunksize set to 131072
+seoultech:2118355:2118386 [1] NCCL INFO Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+seoultech:2118355:2118386 [1] NCCL INFO Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+seoultech:2118355:2118386 [1] NCCL INFO Connected all rings
+seoultech:2118355:2118386 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct/direct
+seoultech:2118355:2118386 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+seoultech:2118355:2118386 [1] NCCL INFO Connected all trees
+seoultech:2118355:2118386 [1] NCCL INFO threadThresholds 8/8/64 | 24/8/64 | 512 | 512
+seoultech:2118355:2118386 [1] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2118355:2118386 [1] NCCL INFO comm 0x2589d5b0 rank 1 nranks 3 cudaDev 1 nvmlDev 1 busId 4b000 commId 0x4b0e033879319a26 - Init COMPLETE
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1435, in main_worker
+    cls.trainer.run(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 305, in run
+    all_steps_are_invalid = cls.train_one_epoch(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 589, in train_one_epoch
+    retval = model(**batch)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/asr/espnet_model.py", line 237, in forward
+    encoder_out, encoder_out_lens = self.encode(speech, speech_lengths)
+  File "/data/bootcamp2501/espnet/espnet2/asr/espnet_model.py", line 402, in encode
+    encoder_out, encoder_out_lens, _ = self.encoder(feats, feats_lengths)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/asr/encoder/conformer_encoder.py", line 353, in forward
+    xs_pad, masks = encoder_layer(xs_pad, masks)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/conformer/encoder_layer.py", line 139, in forward
+    x_att = self.self_attn(x_q, x, x, pos_emb, mask)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/transformer/attention.py", line 305, in forward
+    return self.forward_attention(v, scores, mask)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/transformer/attention.py", line 81, in forward_attention
+    self.attn = torch.softmax(scores, dim=-1).masked_fill(
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 788.00 MiB. GPU 0 has a total capacty of 47.54 GiB of which 691.00 MiB is free. Including non-PyTorch memory, this process has 46.84 GiB memory in use. Of the allocated memory 40.53 GiB is allocated by PyTorch, and 5.86 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Process SpawnProcess-2:
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1435, in main_worker
+    cls.trainer.run(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 305, in run
+    all_steps_are_invalid = cls.train_one_epoch(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 589, in train_one_epoch
+    retval = model(**batch)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/asr/espnet_model.py", line 237, in forward
+    encoder_out, encoder_out_lens = self.encode(speech, speech_lengths)
+  File "/data/bootcamp2501/espnet/espnet2/asr/espnet_model.py", line 402, in encode
+    encoder_out, encoder_out_lens, _ = self.encoder(feats, feats_lengths)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/asr/encoder/conformer_encoder.py", line 353, in forward
+    xs_pad, masks = encoder_layer(xs_pad, masks)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/conformer/encoder_layer.py", line 139, in forward
+    x_att = self.self_attn(x_q, x, x, pos_emb, mask)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/transformer/attention.py", line 305, in forward
+    return self.forward_attention(v, scores, mask)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/transformer/attention.py", line 81, in forward_attention
+    self.attn = torch.softmax(scores, dim=-1).masked_fill(
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 788.00 MiB. GPU 1 has a total capacty of 47.54 GiB of which 349.00 MiB is free. Including non-PyTorch memory, this process has 47.18 GiB memory in use. Of the allocated memory 40.48 GiB is allocated by PyTorch, and 6.24 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Process SpawnProcess-3:
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1435, in main_worker
+    cls.trainer.run(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 305, in run
+    all_steps_are_invalid = cls.train_one_epoch(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 589, in train_one_epoch
+    retval = model(**batch)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/asr/espnet_model.py", line 237, in forward
+    encoder_out, encoder_out_lens = self.encode(speech, speech_lengths)
+  File "/data/bootcamp2501/espnet/espnet2/asr/espnet_model.py", line 402, in encode
+    encoder_out, encoder_out_lens, _ = self.encoder(feats, feats_lengths)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/asr/encoder/conformer_encoder.py", line 353, in forward
+    xs_pad, masks = encoder_layer(xs_pad, masks)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/conformer/encoder_layer.py", line 139, in forward
+    x_att = self.self_attn(x_q, x, x, pos_emb, mask)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/transformer/attention.py", line 305, in forward
+    return self.forward_attention(v, scores, mask)
+  File "/data/bootcamp2501/espnet/espnet/nets/pytorch_backend/transformer/attention.py", line 87, in forward_attention
+    p_attn = self.dropout(self.attn)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/modules/dropout.py", line 58, in forward
+    return F.dropout(input, self.p, self.training, self.inplace)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/nn/functional.py", line 1266, in dropout
+    return _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 722.00 MiB. GPU 2 has a total capacty of 47.54 GiB of which 367.00 MiB is free. Including non-PyTorch memory, this process has 47.16 GiB memory in use. Of the allocated memory 40.06 GiB is allocated by PyTorch, and 6.65 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/runpy.py", line 194, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/data/bootcamp2501/espnet/espnet2/bin/asr_train.py", line 23, in <module>
+    main()
+  File "/data/bootcamp2501/espnet/espnet2/bin/asr_train.py", line 19, in main
+    ASRTask.main(cmd=cmd)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1170, in main
+    while not ProcessContext(processes, error_queues).join():
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/multiprocessing/spawn.py", line 153, in join
+    raise ProcessExitedException(
+torch.multiprocessing.spawn.ProcessExitedException: process 1 terminated with exit code 1
+# Accounting: time=89 threads=1
+# Ended (code 1) at Wed Jan 29 20:27:49 KST 2025, elapsed time 89 seconds

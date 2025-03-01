@@ -1,0 +1,861 @@
+# python3 -m espnet2.bin.asr_train --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram5000/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram5000/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump/raw/devFix.example/wav.scp,speech,sound --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape --resume true --init_param exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.best.pth --ignore_init_mismatch true --fold_length 80000 --output_dir exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp --config conf/train_asr_conformer.yaml --frontend_conf fs=16k --normalize=global_mvn --normalize_conf stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/wav.scp,speech,sound --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/text,text,text --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/text_shape.bpe --valid_data_path_and_name_and_type dump/raw/devFix.example/text,text,text --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/text_shape.bpe --ngpu 3 --multiprocessing_distributed True 
+# Started at Wed Jan 29 20:29:49 KST 2025
+#
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/bin/python3 /data/bootcamp2501/espnet/espnet2/bin/asr_train.py --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram5000/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram5000/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump/raw/devFix.example/wav.scp,speech,sound --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape --resume true --init_param exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.best.pth --ignore_init_mismatch true --fold_length 80000 --output_dir exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp --config conf/train_asr_conformer.yaml --frontend_conf fs=16k --normalize=global_mvn --normalize_conf stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/wav.scp,speech,sound --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/text,text,text --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/text_shape.bpe --valid_data_path_and_name_and_type dump/raw/devFix.example/text,text,text --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/text_shape.bpe --ngpu 3 --multiprocessing_distributed True
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+[seoultech:0/3] 2025-01-29 20:29:56,126 (asr:523) INFO: Vocabulary size: 5000
+[seoultech:0/3] 2025-01-29 20:29:57,721 (abs_task:1271) INFO: pytorch.version=2.1.0, cuda.available=True, cudnn.version=8902, cudnn.benchmark=False, cudnn.deterministic=True
+[seoultech:0/3] 2025-01-29 20:29:57,727 (abs_task:1272) INFO: Model structure:
+ESPnetASRModel(
+  (frontend): DefaultFrontend(
+    (stft): Stft(n_fft=512, win_length=512, hop_length=160, center=True, normalized=False, onesided=True)
+    (frontend): Frontend()
+    (logmel): LogMel(sr=16000, n_fft=512, n_mels=80, fmin=0, fmax=8000.0, htk=False)
+  )
+  (specaug): SpecAug(
+    (time_warp): TimeWarp(window=5, mode=bicubic)
+    (freq_mask): MaskAlongAxis(mask_width_range=[0, 30], num_mask=5, axis=freq)
+    (time_mask): MaskAlongAxis(mask_width_range=[0, 40], num_mask=10, axis=time)
+  )
+  (normalize): GlobalMVN(stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz, norm_means=True, norm_vars=True)
+  (encoder): ConformerEncoder(
+    (embed): Conv2dSubsampling(
+      (conv): Sequential(
+        (0): Conv2d(1, 512, kernel_size=(3, 3), stride=(2, 2))
+        (1): ReLU()
+        (2): Conv2d(512, 512, kernel_size=(3, 3), stride=(2, 2))
+        (3): ReLU()
+      )
+      (out): Sequential(
+        (0): Linear(in_features=9728, out_features=512, bias=True)
+        (1): RelPositionalEncoding(
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+    )
+    (encoders): MultiSequential(
+      (0): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (6): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (7): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (8): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (9): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (10): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (11): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (embed): Sequential(
+      (0): Embedding(5000, 512)
+      (1): PositionalEncoding(
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+    (output_layer): Linear(in_features=512, out_features=5000, bias=True)
+    (decoders): MultiSequential(
+      (0): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (criterion_att): LabelSmoothingLoss(
+    (criterion): KLDivLoss()
+  )
+  (ctc): CTC(
+    (ctc_lo): Linear(in_features=512, out_features=5000, bias=True)
+    (ctc_loss): CTCLoss()
+  )
+)
+
+Model summary:
+    Class Name: ESPnetASRModel
+    Total Number of model parameters: 116.15 M
+    Number of trainable parameters: 116.15 M (100.0%)
+    Size: 464.59 MB
+    Type: torch.float32
+[seoultech:0/3] 2025-01-29 20:29:57,727 (abs_task:1275) INFO: Optimizer:
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 0.0015
+    lr: 2e-08
+    maximize: False
+    weight_decay: 1e-06
+)
+[seoultech:0/3] 2025-01-29 20:29:57,727 (abs_task:1276) INFO: Scheduler: WarmupLR(warmup_steps=75000)
+[seoultech:0/3] 2025-01-29 20:29:57,728 (abs_task:1285) INFO: Saving the configuration in exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/config.yaml
+[seoultech:0/3] 2025-01-29 20:29:57,855 (abs_task:1346) INFO: Loading pretrained params from exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.best.pth
+[seoultech:0/3] 2025-01-29 20:29:59,622 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/3] 2025-01-29 20:30:05,455 (abs_task:1663) INFO: [train] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/trainFix.example_sp/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/trainFix.example_sp/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fac63a119d0>)
+[seoultech:0/3] 2025-01-29 20:30:05,455 (abs_task:1664) INFO: [train] Batch sampler: NumElementsBatchSampler(N-batch=7731, batch_bins=37500000, sort_in_batch=descending, sort_batch=descending)
+[seoultech:0/3] 2025-01-29 20:30:05,457 (abs_task:1665) INFO: [train] mini-batch sizes summary: N-batch=7731, mean=87.7, min=7, max=444
+[seoultech:0/3] 2025-01-29 20:30:05,559 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/3] 2025-01-29 20:30:05,586 (abs_task:1663) INFO: [valid] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/devFix.example/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/devFix.example/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fac63a34bb0>)
+[seoultech:0/3] 2025-01-29 20:30:05,586 (abs_task:1664) INFO: [valid] Batch sampler: NumElementsBatchSampler(N-batch=67, batch_bins=37500000, sort_in_batch=descending, sort_batch=descending)
+[seoultech:0/3] 2025-01-29 20:30:05,586 (abs_task:1665) INFO: [valid] mini-batch sizes summary: N-batch=67, mean=85.0, min=22, max=296
+[seoultech:0/3] 2025-01-29 20:30:05,594 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/3] 2025-01-29 20:30:05,623 (abs_task:1663) INFO: [plot_att] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/devFix.example/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/devFix.example/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fac6380c310>)
+[seoultech:0/3] 2025-01-29 20:30:05,623 (abs_task:1664) INFO: [plot_att] Batch sampler: UnsortedBatchSampler(N-batch=5693, batch_size=1, key_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape, 
+[seoultech:0/3] 2025-01-29 20:30:05,623 (abs_task:1665) INFO: [plot_att] mini-batch sizes summary: N-batch=3, mean=1.0, min=1, max=1
+[seoultech:0/3] 2025-01-29 20:30:06,628 (trainer:168) INFO: The training was resumed using exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/checkpoint.pth
+seoultech:2120311:2120311 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120311:2120311 [0] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2120311:2120311 [0] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2120311:2120311 [0] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2120311:2120311 [0] NCCL INFO cudaDriverVersion 12020
+NCCL version 2.18.5+cuda12.1
+[seoultech:0/3] 2025-01-29 20:30:07,705 (trainer:299) INFO: 27/87epoch started
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+seoultech:2120312:2120312 [1] NCCL INFO cudaDriverVersion 12020
+seoultech:2120312:2120312 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120312:2120312 [1] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2120312:2120312 [1] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2120312:2120312 [1] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2120312:2120398 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120312:2120398 [1] NCCL INFO NET/IB : No device found.
+seoultech:2120312:2120398 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120312:2120398 [1] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2120312:2120398 [1] NCCL INFO Using network Socket
+seoultech:2120312:2120398 [1] NCCL INFO comm 0x36241590 rank 1 nranks 3 cudaDev 1 nvmlDev 1 busId 4b000 commId 0xdb4178b8f96a2bf2 - Init START
+seoultech:2120312:2120398 [1] NCCL INFO Setting affinity for GPU 1 to 0f,ff000fff
+seoultech:2120312:2120398 [1] NCCL INFO NVLS multicast support is not available on dev 1
+seoultech:2120312:2120398 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0
+seoultech:2120312:2120398 [1] NCCL INFO P2P Chunksize set to 131072
+seoultech:2120312:2120398 [1] NCCL INFO Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+seoultech:2120312:2120398 [1] NCCL INFO Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+seoultech:2120312:2120398 [1] NCCL INFO Connected all rings
+seoultech:2120312:2120398 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct/direct
+seoultech:2120312:2120398 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+seoultech:2120312:2120398 [1] NCCL INFO Connected all trees
+seoultech:2120312:2120398 [1] NCCL INFO threadThresholds 8/8/64 | 24/8/64 | 512 | 512
+seoultech:2120312:2120398 [1] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2120312:2120398 [1] NCCL INFO comm 0x36241590 rank 1 nranks 3 cudaDev 1 nvmlDev 1 busId 4b000 commId 0xdb4178b8f96a2bf2 - Init COMPLETE
+seoultech:2120313:2120313 [2] NCCL INFO cudaDriverVersion 12020
+seoultech:2120313:2120313 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120313:2120313 [2] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2120313:2120313 [2] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2120313:2120313 [2] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2120313:2120399 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120313:2120399 [2] NCCL INFO NET/IB : No device found.
+seoultech:2120313:2120399 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120313:2120399 [2] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2120313:2120399 [2] NCCL INFO Using network Socket
+seoultech:2120313:2120399 [2] NCCL INFO comm 0x37c3be70 rank 2 nranks 3 cudaDev 2 nvmlDev 2 busId b1000 commId 0xdb4178b8f96a2bf2 - Init START
+seoultech:2120313:2120399 [2] NCCL INFO Setting affinity for GPU 2 to fff0,00fff000
+seoultech:2120313:2120399 [2] NCCL INFO NVLS multicast support is not available on dev 2
+seoultech:2120313:2120399 [2] NCCL INFO Trees [0] -1/-1/-1->2->1 [1] -1/-1/-1->2->1
+seoultech:2120313:2120399 [2] NCCL INFO P2P Chunksize set to 131072
+seoultech:2120313:2120399 [2] NCCL INFO Channel 00 : 2[2] -> 0[0] via SHM/direct/direct
+seoultech:2120313:2120399 [2] NCCL INFO Channel 01 : 2[2] -> 0[0] via SHM/direct/direct
+seoultech:2120313:2120399 [2] NCCL INFO Connected all rings
+seoultech:2120313:2120399 [2] NCCL INFO Channel 00 : 2[2] -> 1[1] via SHM/direct/direct
+seoultech:2120313:2120399 [2] NCCL INFO Channel 01 : 2[2] -> 1[1] via SHM/direct/direct
+seoultech:2120313:2120399 [2] NCCL INFO Connected all trees
+seoultech:2120313:2120399 [2] NCCL INFO threadThresholds 8/8/64 | 24/8/64 | 512 | 512
+seoultech:2120313:2120399 [2] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2120313:2120399 [2] NCCL INFO comm 0x37c3be70 rank 2 nranks 3 cudaDev 2 nvmlDev 2 busId b1000 commId 0xdb4178b8f96a2bf2 - Init COMPLETE
+seoultech:2120311:2120397 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120311:2120397 [0] NCCL INFO NET/IB : No device found.
+seoultech:2120311:2120397 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2120311:2120397 [0] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2120311:2120397 [0] NCCL INFO Using network Socket
+seoultech:2120311:2120397 [0] NCCL INFO comm 0x31dae8c0 rank 0 nranks 3 cudaDev 0 nvmlDev 0 busId 31000 commId 0xdb4178b8f96a2bf2 - Init START
+seoultech:2120311:2120397 [0] NCCL INFO Setting affinity for GPU 0 to 0f,ff000fff
+seoultech:2120311:2120397 [0] NCCL INFO NVLS multicast support is not available on dev 0
+seoultech:2120311:2120397 [0] NCCL INFO Channel 00/02 :    0   1   2
+seoultech:2120311:2120397 [0] NCCL INFO Channel 01/02 :    0   1   2
+seoultech:2120311:2120397 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1
+seoultech:2120311:2120397 [0] NCCL INFO P2P Chunksize set to 131072
+seoultech:2120311:2120397 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+seoultech:2120311:2120397 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+seoultech:2120311:2120397 [0] NCCL INFO Connected all rings
+seoultech:2120311:2120397 [0] NCCL INFO Connected all trees
+seoultech:2120311:2120397 [0] NCCL INFO threadThresholds 8/8/64 | 24/8/64 | 512 | 512
+seoultech:2120311:2120397 [0] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2120311:2120397 [0] NCCL INFO comm 0x31dae8c0 rank 0 nranks 3 cudaDev 0 nvmlDev 0 busId 31000 commId 0xdb4178b8f96a2bf2 - Init COMPLETE
+[seoultech:0/3] 2025-01-29 20:35:01,964 (trainer:754) INFO: 27epoch:train:1-386batch: iter_time=0.001, forward_time=0.250, loss_ctc=10.998, loss_att=5.579, acc=0.959, loss=7.205, backward_time=0.318, grad_norm=17.784, clip=100.000, loss_scale=3.436e+10, optim_step_time=0.033, optim0_lr0=7.649e-04, train_time=3.049
+[seoultech:0/3] 2025-01-29 20:39:40,561 (trainer:754) INFO: 27epoch:train:387-772batch: iter_time=1.875e-04, forward_time=0.255, loss_ctc=11.333, loss_att=5.846, acc=0.958, loss=7.492, backward_time=0.327, grad_norm=14.752, clip=100.000, loss_scale=3.436e+10, optim_step_time=0.031, optim0_lr0=7.668e-04, train_time=2.886
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/runpy.py", line 194, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/data/bootcamp2501/espnet/espnet2/bin/asr_train.py", line 23, in <module>
+    main()
+  File "/data/bootcamp2501/espnet/espnet2/bin/asr_train.py", line 19, in main
+    ASRTask.main(cmd=cmd)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1170, in main
+    while not ProcessContext(processes, error_queues).join():
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/multiprocessing/spawn.py", line 114, in join
+    ready = multiprocessing.connection.wait(
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/connection.py", line 931, in wait
+    ready = selector.select(timeout)
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/selectors.py", line 415, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+Process SpawnProcess-3:
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1435, in main_worker
+    cls.trainer.run(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 305, in run
+    all_steps_are_invalid = cls.train_one_epoch(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 652, in train_one_epoch
+    scaler.scale(loss).backward()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
+Process SpawnProcess-2:
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1435, in main_worker
+    cls.trainer.run(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 305, in run
+    all_steps_are_invalid = cls.train_one_epoch(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 652, in train_one_epoch
+    scaler.scale(loss).backward()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/bootcamp2501/espnet/espnet2/tasks/abs_task.py", line 1435, in main_worker
+    cls.trainer.run(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 305, in run
+    all_steps_are_invalid = cls.train_one_epoch(
+  File "/data/bootcamp2501/espnet/espnet2/train/trainer.py", line 652, in train_one_epoch
+    scaler.scale(loss).backward()
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
