@@ -3,11 +3,14 @@
 # ESPnet 기반 음성인식 최적화 프로젝트
 
 ## Project Summary
+- Following are results of a study on the "Convergence and Open Sharing System" Project, supported by the Ministry of Education and National Research Foundation of Korea
 - This project aims to optimize a speech recognition model using ESPnet, improving performance based on the Librispeech, KorEduEng, and Gravo datasets.
 - We fine-tuned the LibriSpeech pretrained model with the KorEduEng dataset and applied beam search optimization, data augmentation, and hyperparameter tuning, reducing the Word Error Rate (WER) from 34.0% to 4.3%.
 - This document provides a detailed explanation of the step-by-step model improvement process and performance enhancement techniques.
 
+
 ## Project Summary
+- 본 과제(결과물)는 교육부와 한국연구재단의 재원으로 지원을 받아 수행된 첨단분야 혁신융합대학사업의 연구결과입니다
 - 이 프로젝트는 ESPnet을 활용한 음성 인식 모델 최적화를 목표로 하며, Librispeech, KorEduEng, Gravo 데이터셋을 기반으로 성능을 개선하였습니다.
 - 우리는 LibriSpeech 사전 학습 모델을 KorEduEng 데이터셋으로 Fine-Tuning하고, 빔 서치(Beam Search) 최적화, 데이터 증강, 하이퍼파라미터 튜닝을 적용하여 WER(단어 오류율)을 34.0%에서 4.3%로 감소시켰습니다.
 - 이 문서는 단계별 모델 개선 과정과 성능 향상 기법을 상세히 설명합니다.
@@ -24,7 +27,6 @@
 | Final model     | Hugging Face 기반 모델  | 4.3 | 사전학습된 강력한 모델 활용 및 Fine-Tuning |
 
 
-# Self-supervised learning features [HuBERT_large_ll60k, Conformer, utt_mvn](conf/tuning/train_asr_conformer7_hubert_ll60k_large.yaml) with [Transformer-LM](conf/tuning/train_lm_transformer2.yaml)
 
 ## Environments
 - date: `Sun Jan 26 23:19:13 KST 2025`
@@ -32,12 +34,12 @@
 - espnet version: `espnet 202402`
 - pytorch version: `pytorch 2.1.0`
 - Git hash: `6ddbdf3fd5ab113f2849104812df6e93a236130a`
-  - Commit date: `Tue Feb 6 02:46:40 2024 +0000` #수정필요 
-- ASR config: [conf/tuning/transducer/train_conformer-rnn_transducer_multi_blank.yaml](conf/tuning/transducer/train_conformer-rnn_transducer_multi_blank.yaml)#수정필요 
-- Decode config: [conf/tuning/transducer/decode_multi_blank_transducer.yaml](conf/tuning/transducer/decode_multi_blank_transducer.yaml)#수정필요 
-- Pretrained model: [https://huggingface.co/espnet/librispeech_multiblank_transducer_8421](https://huggingface.co/espnet/librispeech_multiblank_transducer_8421)#수정필요 
+  - Commit date: `Tue Feb 6 02:46:40 2024 +0000`  
+- ASR config: [conf/train_asr_conformer.yaml](conf/train_asr_conformer.yaml) 
+- Decode config: [conf/decode_asr.yaml](conf/decode_asr.yaml) 
+- Pretrained model: [https://huggingface.co/espnet/librispeech_multiblank_transducer_8421](https://huggingface.co/espnet/librispeech_multiblank_transducer_8421) 
 
-# TARGET : LibriSpeech WER
+## TARGET : LibriSpeech WER
 ## exp_ex1/asr_train_asr_conformer_raw_en_bpe5000(LibriSpeech -> LibriSpeech Test) (NO TARGET, JUST BASELINE)  
 ### Epoch LM : 20, AM : 30 , Beamsize 60
 ### Environments
@@ -46,8 +48,8 @@
 - espnet version: `espnet 202402`
 - pytorch version: `pytorch 2.1.0`
 - Git hash: `6ddbdf3fd5ab113f2849104812df6e93a236130a`
-- ASR config: [conf/tuning/transducer/train_conformer-rnn_transducer_multi_blank.yaml](conf/tuning/transducer/train_conformer-rnn_transducer_multi_blank.yaml)
-- Decode config: [conf/tuning/transducer/decode_multi_blank_transducer.yaml](conf/tuning/transducer/decode_multi_blank_transducer.yaml)
+- ASR config: [conf/train_asr_conformer.yaml](conf/train_asr_conformer.yaml)
+- Decode config: [conf/decode_asr.yaml](conf/decode_asr.yaml)
 - Pretrained model: [https://huggingface.co/espnet/librispeech_multiblank_transducer_8421](https://huggingface.co/espnet/librispeech_multiblank_transducer_8421)
 
 ### WER 
@@ -70,8 +72,8 @@
 |decode_asr_asr_model_valid.acc.ave/test_clean|2620|65818|96.8|2.2|1.0|0.4|3.5|32.8|
 |decode_asr_asr_model_valid.acc.ave/test_other|2939|65101|92.7|5.2|2.1|0.9|8.2|52.7|
 
-# TARGET : KorEduEng WER
-# LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 33.7))
+## TARGET : KorEduEng WER
+## LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 33.7))
 ## exp_ex1/asr_train_asr_conformer_raw_en_bpe5000 (LibriSpeech -> KorEduEng Test) BASELINE (WER 33.7)
 ### Epoch LM : 20, AM : 30 , Beamsize 60
 ### Environments
@@ -90,7 +92,7 @@
 |decode_asr_asr_model_valid.acc.ave/test1|5692|151728|72.9|22.5|4.6|6.5|33.7|88.6|
 
 
-# LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 16.1))
+## LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 16.1))
 ## exp_ex1/asr_train_asr_conformer_raw_en_bpe5000 (LibriSpeech -> KorEduEng Test) BASELINE (WER 16.1)
 ### Epoch LM : 20 →90 , AM : 30 → 38 WER(16.1) , Beamsize : 60 -> 27
 ### Environments
@@ -123,8 +125,8 @@
 |decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|186919|84.8|7.6|7.6|2.3|17.5|54.9|
 
 
-# TARGET : KorEduEng WER
-# LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 8.0))
+## TARGET : KorEduEng WER
+## LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 8.0))
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp (WRONG TEST FILE FIX ver1) (WER 8.0)
 ### Epoch LM : 90 → 150, AM : 38 → 55 WER(8.0) , Beamsize : 27
 ### Environments
@@ -156,8 +158,8 @@
 |decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|186919|92.9|4.4|2.7|1.9|9.0|28.5|
 
 
-# TARGET : KorEduEng WER
-# LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 7.9))
+## TARGET : KorEduEng WER
+## LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver1 (WER 7.9))
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp (WER 7.9)
 ### LM weight : 0.6 -> 0.8 Beasize : 27 -> 60, WRONG TEST FILE TEXT FIX ver1
 ### Environments
@@ -192,8 +194,8 @@
 |decode_asr_lm_lm_train_lm_transformer2_en_bpe5000_valid.loss.ave_asr_model_valid.acc.ave/test1Fix.example|5692|186919|92.9|4.2|2.9|1.8|8.9|29.1|
 
 
-# TARGET : KorEduEng WER
-# LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver2 (WER 5.3))
+## TARGET : KorEduEng WER
+## LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver2 (WER 5.3))
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp  
 ## Epoch LM : 120 -> 250, ASR : 55 -> 80 , specaug 수정 (x3 → x5), freq mask range 확장
 ## Environments
@@ -225,8 +227,8 @@
 |ver3_maxepoch/test1Fix.example|5692|187118|94.7|3.0|2.2|1.0|6.3|26.5|
 
 
-# TARGET : KorEduEng WER
-# LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver2 (WER 5.3))
+## TARGET : KorEduEng WER
+## LibriSpeech -> KorEduEng Test (WRONG TEST FILE TEXT FIX ver2 (WER 5.3))
 ## exp_ex3/asr_train_asr_conformer_raw_en_bpe5000_sp  
 ## Epoch LM : 120 -> 250, ASR : 55 -> 80 , specaug 수정 (x3 → x5), freq mask range 확장
 ## Environments
