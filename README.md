@@ -17,10 +17,10 @@
 | Step            | Model                      | WER (%) | Explanation                                        |
 |-------------------|----------------------------|---------|----------------------------------------------------|
 | Baseline        | LibriSpeech Pretrained     | 33.7    | Zero-shot evaluation on the KorEduEng dataset      |
-| Fine-Tuning 1 | KorEduEng Fine-Tuning      | 16.1    | Fine-tuning on the KorEduEng dataset               |
-| Fine-Tuning 2 | KorEduEng Fine-Tuning      | 8.0     | Fine-tuning with parameter tuning (variant 2)    |
-| Fine-Tuning 3 | KorEduEng Fine-Tuning      | 7.9     | Fine-tuning with parameter tuning (variant 3)    |
-| Fine-Tuning 4   | Optimized KorEduEng Model  | 5.3     | Architecture adjustments & training optimizations  |
+| Fine-Tuning_1 | KorEduEng Fine-Tuning      | 16.1    | Fine-tuning on the KorEduEng dataset               |
+| Fine-Tuning_2 | KorEduEng Fine-Tuning      | 8.0     | Fine-tuning with parameter tuning (variant 2)    |
+| Fine-Tuning_3 | KorEduEng Fine-Tuning      | 7.9     | Fine-tuning with parameter tuning (variant 3)    |
+| Fine-Tuning_4   | Optimized KorEduEng Model  | 5.3     | Architecture adjustments & training optimizations  |
 | Final Model     | Hugging Face-based Model   | 4.3     | Fine-tuning using a powerful Hugging Face pretrained model |
 
 
