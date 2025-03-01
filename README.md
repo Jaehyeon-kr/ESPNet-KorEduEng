@@ -14,14 +14,14 @@
 
 ## Advance
 
-| Step            | Model                      | WER (%) | Explanation                                        |
-|-------------------|----------------------------|---------|----------------------------------------------------|
-| Baseline        | LibriSpeech Pretrained     | 33.7    | Zero-shot evaluation on the KorEduEng dataset      |
-| Fine-Tuning_1 | KorEduEng Fine-Tuning      | 16.1    | Fine-tuning on the KorEduEng dataset               |
-| Fine-Tuning_2 | KorEduEng Fine-Tuning      | 8.0     | Fine-tuning with parameter tuning (variant 2)    |
-| Fine-Tuning_3 | KorEduEng Fine-Tuning      | 7.9     | Fine-tuning with parameter tuning (variant 3)    |
-| Fine-Tuning_4   | Optimized KorEduEng Model  | 5.3     | Architecture adjustments & training optimizations  |
-| Final Model     | Hugging Face-based Model   | 4.3     | Fine-tuning using a powerful Hugging Face pretrained model |
+| Step           | Model                       | WER (%) | Explanation                                              |
+|----------------|-----------------------------|---------|----------------------------------------------------------|
+| Baseline       | LibriSpeech Pretrained      | 33.7    | Zero-shot evaluation on the KorEduEng dataset            |
+| Fine-Tuning_1  | KorEduEng Fine-Tuning       | 16.1    | Fine-tuning on the KorEduEng dataset                     |
+| Fine-Tuning_2  | KorEduEng Fine-Tuning       | 8.0     | Fine-tuning with parameter tuning (variant 2)            |
+| Fine-Tuning_3  | KorEduEng Fine-Tuning       | 7.9     | Fine-tuning with parameter tuning (variant 3)            |
+| Fine-Tuning_4  | Optimized KorEduEng Model   | 5.3     | Architecture adjustments & training optimizations        |
+| Final Model    | Hugging Face-based Model    | 4.3     | Fine-tuning using a powerful Hugging Face pretrained model|
 
 
 
@@ -42,7 +42,7 @@
 
 ### WER 
 
-|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Errl
+|dataset|Snt|Wrd|Corr|Sub|Del|Ins|Err|S.Err|
 |---|---|---|---|---|---|---|---|---|
 |decode_asr_asr_model_valid.acc.ave/test_clean|2620|52576|97.5|2.3|0.2|0.3|2.9|32.81
 |decode_asr_asr_model_valid.acc.ave/test_other|2939|52343|93.9|5.5|0.6|0.7|6.8|52.71
