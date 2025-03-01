@@ -1,0 +1,8 @@
+espnet: 0.10.5a1
+files:
+  asr_model_file: exp/asr_conformer_mono16k_warmup800_lr2e-4_accum2/valid.acc.ave_10best.pth
+python: "3.9.7 (default, Sep 16 2021, 13:09:58) \n[GCC 7.5.0]"
+timestamp: 1637443284.588704
+torch: 1.9.0
+yaml_files:
+  asr_train_config: exp/asr_conformer_mono16k_warmup800_lr2e-4_accum2/config.yaml

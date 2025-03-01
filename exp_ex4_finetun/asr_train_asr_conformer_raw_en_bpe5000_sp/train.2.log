@@ -1,0 +1,1004 @@
+# python3 -m espnet2.bin.asr_train --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram5000/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram5000/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump/raw/devFix.example/wav.scp,speech,sound --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape --resume true --init_param exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/checkpoint.pth --ignore_init_mismatch true --fold_length 80000 --output_dir exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp --config conf/train_asr_conformer.yaml --frontend_conf fs=16k --normalize=global_mvn --normalize_conf stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/wav.scp,speech,sound --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/text,text,text --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/text_shape.bpe --valid_data_path_and_name_and_type dump/raw/devFix.example/text,text,text --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/text_shape.bpe --ngpu 4 --multiprocessing_distributed True 
+# Started at Thu Jan 30 23:16:55 KST 2025
+#
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/bin/python3 /data/bootcamp2501/espnet/espnet2/bin/asr_train.py --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram5000/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram5000/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump/raw/devFix.example/wav.scp,speech,sound --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape --resume true --init_param exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/checkpoint.pth --ignore_init_mismatch true --fold_length 80000 --output_dir exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp --config conf/train_asr_conformer.yaml --frontend_conf fs=16k --normalize=global_mvn --normalize_conf stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/wav.scp,speech,sound --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump/raw/trainFix.example_sp/text,text,text --train_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/text_shape.bpe --valid_data_path_and_name_and_type dump/raw/devFix.example/text,text,text --valid_shape_file exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/text_shape.bpe --ngpu 4 --multiprocessing_distributed True
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+[seoultech:0/4] 2025-01-30 23:17:02,882 (asr:523) INFO: Vocabulary size: 5000
+[seoultech:0/4] 2025-01-30 23:17:04,503 (abs_task:1271) INFO: pytorch.version=2.1.0, cuda.available=True, cudnn.version=8902, cudnn.benchmark=False, cudnn.deterministic=True
+[seoultech:0/4] 2025-01-30 23:17:04,509 (abs_task:1272) INFO: Model structure:
+ESPnetASRModel(
+  (frontend): DefaultFrontend(
+    (stft): Stft(n_fft=512, win_length=512, hop_length=160, center=True, normalized=False, onesided=True)
+    (frontend): Frontend()
+    (logmel): LogMel(sr=16000, n_fft=512, n_mels=80, fmin=0, fmax=8000.0, htk=False)
+  )
+  (specaug): SpecAug(
+    (time_warp): TimeWarp(window=5, mode=bicubic)
+    (freq_mask): MaskAlongAxis(mask_width_range=[0, 30], num_mask=5, axis=freq)
+    (time_mask): MaskAlongAxis(mask_width_range=[0, 40], num_mask=10, axis=time)
+  )
+  (normalize): GlobalMVN(stats_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/train/feats_stats.npz, norm_means=True, norm_vars=True)
+  (encoder): ConformerEncoder(
+    (embed): Conv2dSubsampling(
+      (conv): Sequential(
+        (0): Conv2d(1, 512, kernel_size=(3, 3), stride=(2, 2))
+        (1): ReLU()
+        (2): Conv2d(512, 512, kernel_size=(3, 3), stride=(2, 2))
+        (3): ReLU()
+      )
+      (out): Sequential(
+        (0): Linear(in_features=9728, out_features=512, bias=True)
+        (1): RelPositionalEncoding(
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+    )
+    (encoders): MultiSequential(
+      (0): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (6): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (7): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (8): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (9): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (10): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (11): EncoderLayer(
+        (self_attn): RelPositionMultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (linear_pos): Linear(in_features=512, out_features=512, bias=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (conv_module): ConvolutionModule(
+          (pointwise_conv1): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+          (depthwise_conv): Conv1d(512, 512, kernel_size=(31,), stride=(1,), padding=(15,), groups=512)
+          (norm): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (pointwise_conv2): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_conv): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+  )
+  (decoder): TransformerDecoder(
+    (embed): Sequential(
+      (0): Embedding(5000, 512)
+      (1): PositionalEncoding(
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+    (output_layer): Linear(in_features=512, out_features=5000, bias=True)
+    (decoders): MultiSequential(
+      (0): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (criterion_att): LabelSmoothingLoss(
+    (criterion): KLDivLoss()
+  )
+  (ctc): CTC(
+    (ctc_lo): Linear(in_features=512, out_features=5000, bias=True)
+    (ctc_loss): CTCLoss()
+  )
+)
+
+Model summary:
+    Class Name: ESPnetASRModel
+    Total Number of model parameters: 116.15 M
+    Number of trainable parameters: 116.15 M (100.0%)
+    Size: 464.59 MB
+    Type: torch.float32
+[seoultech:0/4] 2025-01-30 23:17:04,510 (abs_task:1275) INFO: Optimizer:
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 0.0015
+    lr: 2e-08
+    maximize: False
+    weight_decay: 1e-06
+)
+[seoultech:0/4] 2025-01-30 23:17:04,510 (abs_task:1276) INFO: Scheduler: WarmupLR(warmup_steps=75000)
+[seoultech:0/4] 2025-01-30 23:17:04,510 (abs_task:1285) INFO: Saving the configuration in exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/config.yaml
+[seoultech:0/4] 2025-01-30 23:17:04,591 (abs_task:1346) INFO: Loading pretrained params from exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/checkpoint.pth
+[seoultech:0/4] 2025-01-30 23:17:05,477 (load_pretrained_model:26) WARNING: Filter out model from pretrained dict because of name not found in target dict
+[seoultech:0/4] 2025-01-30 23:17:05,477 (load_pretrained_model:26) WARNING: Filter out reporter from pretrained dict because of name not found in target dict
+[seoultech:0/4] 2025-01-30 23:17:05,477 (load_pretrained_model:26) WARNING: Filter out optimizers from pretrained dict because of name not found in target dict
+[seoultech:0/4] 2025-01-30 23:17:05,477 (load_pretrained_model:26) WARNING: Filter out schedulers from pretrained dict because of name not found in target dict
+[seoultech:0/4] 2025-01-30 23:17:05,477 (load_pretrained_model:26) WARNING: Filter out scaler from pretrained dict because of name not found in target dict
+[seoultech:0/4] 2025-01-30 23:17:06,764 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/4] 2025-01-30 23:17:12,241 (abs_task:1663) INFO: [train] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/trainFix.example_sp/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/trainFix.example_sp/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fdb7d117f40>)
+[seoultech:0/4] 2025-01-30 23:17:12,241 (abs_task:1664) INFO: [train] Batch sampler: NumElementsBatchSampler(N-batch=5876, batch_bins=50000000, sort_in_batch=descending, sort_batch=descending)
+[seoultech:0/4] 2025-01-30 23:17:12,242 (abs_task:1665) INFO: [train] mini-batch sizes summary: N-batch=5876, mean=115.4, min=14, max=575
+[seoultech:0/4] 2025-01-30 23:17:12,312 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/4] 2025-01-30 23:17:12,338 (abs_task:1663) INFO: [valid] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/devFix.example/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/devFix.example/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fdb7ccadbb0>)
+[seoultech:0/4] 2025-01-30 23:17:12,338 (abs_task:1664) INFO: [valid] Batch sampler: NumElementsBatchSampler(N-batch=52, batch_bins=50000000, sort_in_batch=descending, sort_batch=descending)
+[seoultech:0/4] 2025-01-30 23:17:12,338 (abs_task:1665) INFO: [valid] mini-batch sizes summary: N-batch=52, mean=109.5, min=12, max=388
+[seoultech:0/4] 2025-01-30 23:17:12,347 (asr:494) INFO: Optional Data Names: ('text_spk2', 'text_spk3', 'text_spk4', 'prompt')
+[seoultech:0/4] 2025-01-30 23:17:12,374 (abs_task:1663) INFO: [plot_att] dataset:
+ESPnetDataset(
+  speech: {"path": "dump/raw/devFix.example/wav.scp", "type": "sound"}
+  text: {"path": "dump/raw/devFix.example/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.CommonPreprocessor object at 0x7fdb7ccadcd0>)
+[seoultech:0/4] 2025-01-30 23:17:12,374 (abs_task:1664) INFO: [plot_att] Batch sampler: UnsortedBatchSampler(N-batch=5693, batch_size=1, key_file=exp_ex4_finetun/asr_stats_raw_en_bpe5000_sp/valid/speech_shape, 
+[seoultech:0/4] 2025-01-30 23:17:12,375 (abs_task:1665) INFO: [plot_att] mini-batch sizes summary: N-batch=3, mean=1.0, min=1, max=1
+[seoultech:0/4] 2025-01-30 23:17:13,203 (trainer:168) INFO: The training was resumed using exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/checkpoint.pth
+seoultech:2569932:2569932 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569932:2569932 [0] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2569932:2569932 [0] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2569932:2569932 [0] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2569932:2569932 [0] NCCL INFO cudaDriverVersion 12020
+NCCL version 2.18.5+cuda12.1
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+[seoultech:0/4] 2025-01-30 23:17:14,328 (trainer:299) INFO: 41/50epoch started
+seoultech:2569932:2570068 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569932:2570068 [0] NCCL INFO NET/IB : No device found.
+seoultech:2569932:2570068 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569932:2570068 [0] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2569932:2570068 [0] NCCL INFO Using network Socket
+seoultech:2569932:2570068 [0] NCCL INFO comm 0x35abd7e0 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 31000 commId 0xb3a28b77b4753f0b - Init START
+seoultech:2569932:2570068 [0] NCCL INFO Setting affinity for GPU 0 to 0f,ff000fff
+seoultech:2569932:2570068 [0] NCCL INFO NVLS multicast support is not available on dev 0
+seoultech:2569932:2570068 [0] NCCL INFO Channel 00/02 :    0   1   2   3
+seoultech:2569932:2570068 [0] NCCL INFO Channel 01/02 :    0   1   2   3
+seoultech:2569932:2570068 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1
+seoultech:2569932:2570068 [0] NCCL INFO P2P Chunksize set to 131072
+seoultech:2569932:2570068 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+seoultech:2569932:2570068 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+seoultech:2569932:2570068 [0] NCCL INFO Connected all rings
+seoultech:2569932:2570068 [0] NCCL INFO Connected all trees
+seoultech:2569932:2570068 [0] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+seoultech:2569932:2570068 [0] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2569932:2570068 [0] NCCL INFO comm 0x35abd7e0 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 31000 commId 0xb3a28b77b4753f0b - Init COMPLETE
+seoultech:2569934:2569934 [2] NCCL INFO cudaDriverVersion 12020
+seoultech:2569934:2569934 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569934:2569934 [2] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2569934:2569934 [2] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2569934:2569934 [2] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2569934:2570070 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569934:2570070 [2] NCCL INFO NET/IB : No device found.
+seoultech:2569934:2570070 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569934:2570070 [2] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2569934:2570070 [2] NCCL INFO Using network Socket
+seoultech:2569934:2570070 [2] NCCL INFO comm 0x21634710 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId b1000 commId 0xb3a28b77b4753f0b - Init START
+seoultech:2569934:2570070 [2] NCCL INFO Setting affinity for GPU 2 to fff0,00fff000
+seoultech:2569934:2570070 [2] NCCL INFO NVLS multicast support is not available on dev 2
+seoultech:2569934:2570070 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1
+seoultech:2569934:2570070 [2] NCCL INFO P2P Chunksize set to 131072
+seoultech:2569934:2570070 [2] NCCL INFO Channel 00 : 2[2] -> 3[3] via SHM/direct/direct
+seoultech:2569934:2570070 [2] NCCL INFO Channel 01 : 2[2] -> 3[3] via SHM/direct/direct
+seoultech:2569934:2570070 [2] NCCL INFO Connected all rings
+seoultech:2569934:2570070 [2] NCCL INFO Channel 00 : 2[2] -> 1[1] via SHM/direct/direct
+seoultech:2569934:2570070 [2] NCCL INFO Channel 01 : 2[2] -> 1[1] via SHM/direct/direct
+seoultech:2569934:2570070 [2] NCCL INFO Connected all trees
+seoultech:2569934:2570070 [2] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+seoultech:2569934:2570070 [2] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2569934:2570070 [2] NCCL INFO comm 0x21634710 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId b1000 commId 0xb3a28b77b4753f0b - Init COMPLETE
+seoultech:2569935:2569935 [3] NCCL INFO cudaDriverVersion 12020
+seoultech:2569935:2569935 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569935:2569935 [3] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2569935:2569935 [3] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2569935:2569935 [3] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2569935:2570069 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569935:2570069 [3] NCCL INFO NET/IB : No device found.
+seoultech:2569935:2570069 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569935:2570069 [3] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2569935:2570069 [3] NCCL INFO Using network Socket
+seoultech:2569935:2570069 [3] NCCL INFO comm 0x3e0a9760 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId ca000 commId 0xb3a28b77b4753f0b - Init START
+seoultech:2569935:2570069 [3] NCCL INFO Setting affinity for GPU 3 to fff0,00fff000
+seoultech:2569935:2570069 [3] NCCL INFO NVLS multicast support is not available on dev 3
+seoultech:2569935:2570069 [3] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2
+seoultech:2569935:2570069 [3] NCCL INFO P2P Chunksize set to 131072
+seoultech:2569935:2570069 [3] NCCL INFO Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+seoultech:2569935:2570069 [3] NCCL INFO Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+seoultech:2569935:2570069 [3] NCCL INFO Connected all rings
+seoultech:2569935:2570069 [3] NCCL INFO Channel 00 : 3[3] -> 2[2] via SHM/direct/direct
+seoultech:2569935:2570069 [3] NCCL INFO Channel 01 : 3[3] -> 2[2] via SHM/direct/direct
+seoultech:2569935:2570069 [3] NCCL INFO Connected all trees
+seoultech:2569935:2570069 [3] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+seoultech:2569935:2570069 [3] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2569935:2570069 [3] NCCL INFO comm 0x3e0a9760 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId ca000 commId 0xb3a28b77b4753f0b - Init COMPLETE
+seoultech:2569933:2569933 [1] NCCL INFO cudaDriverVersion 12020
+seoultech:2569933:2569933 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569933:2569933 [1] NCCL INFO Bootstrap : Using eno1:117.17.185.208<0>
+seoultech:2569933:2569933 [1] NCCL INFO NET/Plugin : Plugin load (libnccl-net.so) returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory
+seoultech:2569933:2569933 [1] NCCL INFO NET/Plugin : No plugin found, using internal implementation
+seoultech:2569933:2570071 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569933:2570071 [1] NCCL INFO NET/IB : No device found.
+seoultech:2569933:2570071 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo,docker,virbr,vmnet,vboxnet
+seoultech:2569933:2570071 [1] NCCL INFO NET/Socket : Using [0]eno1:117.17.185.208<0>
+seoultech:2569933:2570071 [1] NCCL INFO Using network Socket
+seoultech:2569933:2570071 [1] NCCL INFO comm 0x25204d40 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 4b000 commId 0xb3a28b77b4753f0b - Init START
+seoultech:2569933:2570071 [1] NCCL INFO Setting affinity for GPU 1 to 0f,ff000fff
+seoultech:2569933:2570071 [1] NCCL INFO NVLS multicast support is not available on dev 1
+seoultech:2569933:2570071 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0
+seoultech:2569933:2570071 [1] NCCL INFO P2P Chunksize set to 131072
+seoultech:2569933:2570071 [1] NCCL INFO Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+seoultech:2569933:2570071 [1] NCCL INFO Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+seoultech:2569933:2570071 [1] NCCL INFO Connected all rings
+seoultech:2569933:2570071 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct/direct
+seoultech:2569933:2570071 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+seoultech:2569933:2570071 [1] NCCL INFO Connected all trees
+seoultech:2569933:2570071 [1] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+seoultech:2569933:2570071 [1] NCCL INFO 2 coll channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+seoultech:2569933:2570071 [1] NCCL INFO comm 0x25204d40 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 4b000 commId 0xb3a28b77b4753f0b - Init COMPLETE
+[seoultech:0/4] 2025-01-30 23:21:10,908 (trainer:754) INFO: 41epoch:train:1-293batch: iter_time=0.001, forward_time=0.253, loss_ctc=8.220, loss_att=4.061, acc=0.969, loss=5.309, backward_time=0.332, grad_norm=10.849, clip=95.890, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.233
+[seoultech:0/4] 2025-01-30 23:24:45,684 (trainer:754) INFO: 41epoch:train:294-586batch: iter_time=1.934e-04, forward_time=0.257, loss_ctc=8.026, loss_att=4.019, acc=0.972, loss=5.221, backward_time=0.334, grad_norm=10.826, clip=98.630, loss_scale=2.815e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=2.936
+[seoultech:0/4] 2025-01-30 23:28:15,964 (trainer:754) INFO: 41epoch:train:587-879batch: iter_time=1.990e-04, forward_time=0.253, loss_ctc=7.993, loss_att=3.946, acc=0.971, loss=5.160, backward_time=0.325, grad_norm=9.865, clip=97.260, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.866
+[seoultech:0/4] 2025-01-30 23:31:48,339 (trainer:754) INFO: 41epoch:train:880-1172batch: iter_time=1.921e-04, forward_time=0.254, loss_ctc=8.214, loss_att=3.980, acc=0.967, loss=5.250, backward_time=0.328, grad_norm=9.646, clip=97.297, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.896
+[seoultech:0/4] 2025-01-30 23:35:21,356 (trainer:754) INFO: 41epoch:train:1173-1465batch: iter_time=1.869e-04, forward_time=0.256, loss_ctc=8.131, loss_att=3.933, acc=0.970, loss=5.192, backward_time=0.329, grad_norm=11.111, clip=95.890, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.910
+[seoultech:0/4] 2025-01-30 23:38:57,253 (trainer:754) INFO: 41epoch:train:1466-1758batch: iter_time=1.808e-04, forward_time=0.259, loss_ctc=7.808, loss_att=3.841, acc=0.972, loss=5.031, backward_time=0.334, grad_norm=9.274, clip=95.890, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.945
+[seoultech:0/4] 2025-01-30 23:42:31,659 (trainer:754) INFO: 41epoch:train:1759-2051batch: iter_time=1.767e-04, forward_time=0.255, loss_ctc=8.051, loss_att=4.056, acc=0.972, loss=5.254, backward_time=0.333, grad_norm=10.624, clip=98.630, loss_scale=2.815e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=2.924
+[seoultech:0/4] 2025-01-30 23:46:01,485 (trainer:754) INFO: 41epoch:train:2052-2344batch: iter_time=1.749e-04, forward_time=0.254, loss_ctc=8.094, loss_att=3.919, acc=0.970, loss=5.172, backward_time=0.322, grad_norm=10.854, clip=98.649, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.867
+[seoultech:0/4] 2025-01-30 23:49:33,921 (trainer:754) INFO: 41epoch:train:2345-2637batch: iter_time=1.724e-04, forward_time=0.251, loss_ctc=8.246, loss_att=3.892, acc=0.967, loss=5.198, backward_time=0.330, grad_norm=9.324, clip=93.151, loss_scale=2.815e+14, optim_step_time=0.026, optim0_lr0=0.001, train_time=2.895
+[seoultech:0/4] 2025-01-30 23:53:07,743 (trainer:754) INFO: 41epoch:train:2638-2930batch: iter_time=1.770e-04, forward_time=0.260, loss_ctc=7.969, loss_att=3.860, acc=0.970, loss=5.093, backward_time=0.328, grad_norm=9.937, clip=95.890, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.927
+[seoultech:0/4] 2025-01-30 23:56:40,627 (trainer:754) INFO: 41epoch:train:2931-3223batch: iter_time=1.689e-04, forward_time=0.259, loss_ctc=7.707, loss_att=3.743, acc=0.972, loss=4.932, backward_time=0.324, grad_norm=10.230, clip=94.521, loss_scale=2.815e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=2.912
+[seoultech:0/4] 2025-01-31 00:00:16,123 (trainer:754) INFO: 41epoch:train:3224-3516batch: iter_time=1.520e-04, forward_time=0.258, loss_ctc=8.234, loss_att=3.940, acc=0.969, loss=5.228, backward_time=0.331, grad_norm=10.460, clip=94.595, loss_scale=2.815e+14, optim_step_time=0.027, optim0_lr0=0.001, train_time=2.932
+[seoultech:0/4] 2025-01-31 00:03:51,633 (trainer:754) INFO: 41epoch:train:3517-3809batch: iter_time=1.870e-04, forward_time=0.264, loss_ctc=7.871, loss_att=3.918, acc=0.970, loss=5.104, backward_time=0.330, grad_norm=11.719, clip=97.260, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.942
+[seoultech:0/4] 2025-01-31 00:07:29,015 (trainer:754) INFO: 41epoch:train:3810-4102batch: iter_time=1.965e-04, forward_time=0.265, loss_ctc=8.300, loss_att=3.911, acc=0.965, loss=5.227, backward_time=0.334, grad_norm=9.932, clip=94.521, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.967
+[seoultech:0/4] 2025-01-31 00:11:05,257 (trainer:754) INFO: 41epoch:train:4103-4395batch: iter_time=1.960e-04, forward_time=0.265, loss_ctc=7.932, loss_att=3.911, acc=0.971, loss=5.118, backward_time=0.330, grad_norm=9.860, clip=87.671, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.951
+[seoultech:0/4] 2025-01-31 00:14:43,165 (trainer:754) INFO: 41epoch:train:4396-4688batch: iter_time=1.969e-04, forward_time=0.267, loss_ctc=8.072, loss_att=3.830, acc=0.970, loss=5.103, backward_time=0.335, grad_norm=10.077, clip=95.946, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.976
+[seoultech:0/4] 2025-01-31 00:18:17,552 (trainer:754) INFO: 41epoch:train:4689-4981batch: iter_time=1.799e-04, forward_time=0.262, loss_ctc=8.294, loss_att=3.836, acc=0.968, loss=5.173, backward_time=0.331, grad_norm=10.180, clip=94.521, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.931
+[seoultech:0/4] 2025-01-31 00:21:55,701 (trainer:754) INFO: 41epoch:train:4982-5274batch: iter_time=1.739e-04, forward_time=0.267, loss_ctc=8.148, loss_att=3.949, acc=0.968, loss=5.209, backward_time=0.337, grad_norm=9.907, clip=95.890, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.974
+[seoultech:0/4] 2025-01-31 00:25:39,173 (trainer:754) INFO: 41epoch:train:5275-5567batch: iter_time=1.790e-04, forward_time=0.272, loss_ctc=8.120, loss_att=4.274, acc=0.972, loss=5.428, backward_time=0.349, grad_norm=10.573, clip=98.630, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.051
+[seoultech:0/4] 2025-01-31 00:29:19,877 (trainer:754) INFO: 41epoch:train:5568-5860batch: iter_time=1.698e-04, forward_time=0.264, loss_ctc=8.044, loss_att=4.141, acc=0.972, loss=5.312, backward_time=0.341, grad_norm=10.220, clip=95.946, loss_scale=2.815e+14, optim_step_time=0.029, optim0_lr0=0.001, train_time=3.011
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+[seoultech:0/4] 2025-01-31 00:31:25,795 (trainer:353) INFO: 41epoch results: [train] iter_time=2.371e-04, forward_time=0.260, loss_ctc=8.069, loss_att=3.941, acc=0.970, loss=5.180, backward_time=0.332, grad_norm=10.264, clip=95.779, loss_scale=2.815e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=2.952, time=1 hour, 12 minutes and 18.18 seconds, total_count=263176, gpu_max_cached_mem_GB=46.877, [valid] loss_ctc=15.139, cer_ctc=0.031, loss_att=9.112, acc=0.961, cer=0.030, wer=0.272, loss=10.920, time=40.65 seconds, total_count=2312, gpu_max_cached_mem_GB=46.877, [att_plot] time=1 minute and 12.59 seconds, total_count=0, gpu_max_cached_mem_GB=46.877
+[seoultech:0/4] 2025-01-31 00:31:32,572 (trainer:406) INFO: There are no improvements in this epoch
+[seoultech:0/4] 2025-01-31 00:31:32,634 (trainer:462) INFO: The model files were removed: exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/32epoch.pth
+[seoultech:0/4] 2025-01-31 00:31:32,635 (trainer:287) INFO: 42/50epoch started. Estimated time to finish: 11 hours, 8 minutes and 44.76 seconds
+[seoultech:0/4] 2025-01-31 00:35:27,852 (trainer:754) INFO: 42epoch:train:1-293batch: iter_time=0.001, forward_time=0.260, loss_ctc=7.905, loss_att=3.813, acc=0.970, loss=5.040, backward_time=0.335, grad_norm=9.203, clip=94.521, loss_scale=2.815e+14, optim_step_time=0.033, optim0_lr0=0.001, train_time=3.212
+[seoultech:0/4] 2025-01-31 00:39:10,355 (trainer:754) INFO: 42epoch:train:294-586batch: iter_time=1.993e-04, forward_time=0.268, loss_ctc=7.820, loss_att=3.959, acc=0.972, loss=5.117, backward_time=0.347, grad_norm=10.540, clip=97.260, loss_scale=2.815e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.037
+[seoultech:0/4] 2025-01-31 00:42:49,725 (trainer:754) INFO: 42epoch:train:587-879batch: iter_time=1.737e-04, forward_time=0.261, loss_ctc=8.017, loss_att=3.872, acc=0.971, loss=5.116, backward_time=0.341, grad_norm=9.431, clip=98.630, loss_scale=2.969e+14, optim_step_time=0.030, optim0_lr0=0.001, train_time=2.996
+[seoultech:0/4] 2025-01-31 00:46:23,624 (trainer:754) INFO: 42epoch:train:880-1172batch: iter_time=1.951e-04, forward_time=0.255, loss_ctc=8.129, loss_att=3.787, acc=0.969, loss=5.089, backward_time=0.331, grad_norm=9.637, clip=95.946, loss_scale=5.629e+14, optim_step_time=0.030, optim0_lr0=0.001, train_time=2.918
+[seoultech:0/4] 2025-01-31 00:49:58,678 (trainer:754) INFO: 42epoch:train:1173-1465batch: iter_time=2.035e-04, forward_time=0.260, loss_ctc=8.124, loss_att=3.924, acc=0.970, loss=5.184, backward_time=0.331, grad_norm=9.522, clip=94.521, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.940
+[seoultech:0/4] 2025-01-31 00:53:41,242 (trainer:754) INFO: 42epoch:train:1466-1758batch: iter_time=1.986e-04, forward_time=0.270, loss_ctc=7.849, loss_att=3.928, acc=0.971, loss=5.105, backward_time=0.345, grad_norm=10.059, clip=97.260, loss_scale=5.629e+14, optim_step_time=0.033, optim0_lr0=0.001, train_time=3.027
+[seoultech:0/4] 2025-01-31 00:57:23,242 (trainer:754) INFO: 42epoch:train:1759-2051batch: iter_time=1.919e-04, forward_time=0.269, loss_ctc=8.022, loss_att=4.031, acc=0.971, loss=5.229, backward_time=0.345, grad_norm=9.778, clip=94.521, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.028
+[seoultech:0/4] 2025-01-31 01:00:57,198 (trainer:754) INFO: 42epoch:train:2052-2344batch: iter_time=1.894e-04, forward_time=0.257, loss_ctc=8.189, loss_att=3.911, acc=0.965, loss=5.194, backward_time=0.329, grad_norm=10.724, clip=95.946, loss_scale=5.629e+14, optim_step_time=0.030, optim0_lr0=0.001, train_time=2.931
+[seoultech:0/4] 2025-01-31 01:04:37,582 (trainer:754) INFO: 42epoch:train:2345-2637batch: iter_time=1.909e-04, forward_time=0.270, loss_ctc=7.740, loss_att=3.842, acc=0.972, loss=5.011, backward_time=0.338, grad_norm=11.633, clip=95.890, loss_scale=5.629e+14, optim_step_time=0.033, optim0_lr0=0.001, train_time=3.012
+[seoultech:0/4] 2025-01-31 01:08:09,599 (trainer:754) INFO: 42epoch:train:2638-2930batch: iter_time=1.862e-04, forward_time=0.259, loss_ctc=7.837, loss_att=3.789, acc=0.971, loss=5.004, backward_time=0.324, grad_norm=11.075, clip=95.890, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.898
+[seoultech:0/4] 2025-01-31 01:11:51,110 (trainer:754) INFO: 42epoch:train:2931-3223batch: iter_time=1.922e-04, forward_time=0.271, loss_ctc=7.655, loss_att=3.824, acc=0.972, loss=4.974, backward_time=0.342, grad_norm=9.184, clip=95.890, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.014
+[seoultech:0/4] 2025-01-31 01:15:31,262 (trainer:754) INFO: 42epoch:train:3224-3516batch: iter_time=1.807e-04, forward_time=0.266, loss_ctc=8.142, loss_att=3.995, acc=0.969, loss=5.239, backward_time=0.339, grad_norm=9.756, clip=95.946, loss_scale=5.629e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=3.007
+[seoultech:0/4] 2025-01-31 01:19:07,650 (trainer:754) INFO: 42epoch:train:3517-3809batch: iter_time=1.839e-04, forward_time=0.261, loss_ctc=7.560, loss_att=3.717, acc=0.972, loss=4.870, backward_time=0.331, grad_norm=9.264, clip=94.521, loss_scale=5.629e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=2.955
+[seoultech:0/4] 2025-01-31 01:22:49,419 (trainer:754) INFO: 42epoch:train:3810-4102batch: iter_time=1.990e-04, forward_time=0.273, loss_ctc=8.184, loss_att=4.003, acc=0.968, loss=5.257, backward_time=0.341, grad_norm=9.836, clip=94.521, loss_scale=5.629e+14, optim_step_time=0.033, optim0_lr0=0.001, train_time=3.019
+[seoultech:0/4] 2025-01-31 01:26:36,165 (trainer:754) INFO: 42epoch:train:4103-4395batch: iter_time=1.864e-04, forward_time=0.276, loss_ctc=8.191, loss_att=4.037, acc=0.969, loss=5.283, backward_time=0.351, grad_norm=10.594, clip=95.890, loss_scale=5.629e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=3.098
+[seoultech:0/4] 2025-01-31 01:30:18,500 (trainer:754) INFO: 42epoch:train:4396-4688batch: iter_time=1.914e-04, forward_time=0.272, loss_ctc=8.067, loss_att=3.971, acc=0.971, loss=5.200, backward_time=0.344, grad_norm=10.072, clip=98.649, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.038
+[seoultech:0/4] 2025-01-31 01:33:53,392 (trainer:754) INFO: 42epoch:train:4689-4981batch: iter_time=2.076e-04, forward_time=0.264, loss_ctc=8.100, loss_att=3.901, acc=0.969, loss=5.160, backward_time=0.327, grad_norm=10.009, clip=93.151, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.932
+[seoultech:0/4] 2025-01-31 01:37:29,940 (trainer:754) INFO: 42epoch:train:4982-5274batch: iter_time=1.897e-04, forward_time=0.265, loss_ctc=7.635, loss_att=3.844, acc=0.973, loss=4.981, backward_time=0.329, grad_norm=9.581, clip=97.260, loss_scale=5.629e+14, optim_step_time=0.031, optim0_lr0=0.001, train_time=2.953
+[seoultech:0/4] 2025-01-31 01:41:10,031 (trainer:754) INFO: 42epoch:train:5275-5567batch: iter_time=1.808e-04, forward_time=0.270, loss_ctc=8.094, loss_att=3.910, acc=0.970, loss=5.165, backward_time=0.337, grad_norm=11.311, clip=98.630, loss_scale=5.629e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=3.005
+[seoultech:0/4] 2025-01-31 01:44:47,525 (trainer:754) INFO: 42epoch:train:5568-5860batch: iter_time=1.885e-04, forward_time=0.268, loss_ctc=7.869, loss_att=3.717, acc=0.969, loss=4.963, backward_time=0.330, grad_norm=9.963, clip=98.649, loss_scale=5.629e+14, optim_step_time=0.033, optim0_lr0=0.001, train_time=2.972
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+/data/bootcamp2501/espnet/tools/miniconda_py38/envs/espnet/lib/python3.8/site-packages/whisper/timing.py:57: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def backtrace(trace: np.ndarray):
+[seoultech:0/4] 2025-01-31 01:46:55,753 (trainer:353) INFO: 42epoch results: [train] iter_time=2.414e-04, forward_time=0.266, loss_ctc=7.956, loss_att=3.885, acc=0.970, loss=5.106, backward_time=0.337, grad_norm=10.050, clip=96.120, loss_scale=5.218e+14, optim_step_time=0.032, optim0_lr0=0.001, train_time=2.999, time=1 hour, 13 minutes and 27.61 seconds, total_count=269052, gpu_max_cached_mem_GB=46.877, [valid] loss_ctc=15.203, cer_ctc=0.030, loss_att=9.167, acc=0.961, cer=0.030, wer=0.272, loss=10.978, time=40.07 seconds, total_count=2364, gpu_max_cached_mem_GB=46.877, [att_plot] time=1 minute and 15.43 seconds, total_count=0, gpu_max_cached_mem_GB=46.877
+[seoultech:0/4] 2025-01-31 01:47:02,457 (trainer:406) INFO: There are no improvements in this epoch
+[seoultech:0/4] 2025-01-31 01:47:02,518 (trainer:462) INFO: The model files were removed: exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/31epoch.pth
+[seoultech:0/4] 2025-01-31 01:47:02,518 (reporter:414) INFO: [Early stopping] valid.loss has not been improved 6 epochs continuously. The training was stopped at 42epoch
+[seoultech:0/4] 2025-01-31 01:47:02,555 (average_nbest_models:69) INFO: Averaging 10best models: criterion="valid.acc": exp_ex4_finetun/asr_train_asr_conformer_raw_en_bpe5000_sp/valid.acc.ave_10best.pth
+[seoultech:0/4] 2025-01-31 01:47:06,145 (average_nbest_models:96) INFO: Accumulating encoder.encoders.0.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,148 (average_nbest_models:96) INFO: Accumulating encoder.encoders.1.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,152 (average_nbest_models:96) INFO: Accumulating encoder.encoders.2.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,156 (average_nbest_models:96) INFO: Accumulating encoder.encoders.3.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,159 (average_nbest_models:96) INFO: Accumulating encoder.encoders.4.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,163 (average_nbest_models:96) INFO: Accumulating encoder.encoders.5.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,167 (average_nbest_models:96) INFO: Accumulating encoder.encoders.6.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,170 (average_nbest_models:96) INFO: Accumulating encoder.encoders.7.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,174 (average_nbest_models:96) INFO: Accumulating encoder.encoders.8.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,178 (average_nbest_models:96) INFO: Accumulating encoder.encoders.9.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,182 (average_nbest_models:96) INFO: Accumulating encoder.encoders.10.conv_module.norm.num_batches_tracked instead of averaging
+[seoultech:0/4] 2025-01-31 01:47:06,185 (average_nbest_models:96) INFO: Accumulating encoder.encoders.11.conv_module.norm.num_batches_tracked instead of averaging
+# Accounting: time=9016 threads=1
+# Ended (code 0) at Fri Jan 31 01:47:11 KST 2025, elapsed time 9016 seconds
