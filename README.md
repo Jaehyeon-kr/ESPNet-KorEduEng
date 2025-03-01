@@ -15,7 +15,7 @@
 ## Advance
 
 | Step         | Model                      |  WER  | Explanation                                             |
-|--------------|----------------------------|-------|---------------------------------------------------------|
+|---|---|---|---|
 | Baseline     | LibriSpeech Pretrained     | 33.7  | Zero-shot evaluation on the KorEduEng dataset           |
 | Fine-Tuning1 | KorEduEng Fine-Tuning      | 16.1  | Fine-tuning on the KorEduEng dataset                    |
 | Fine-Tuning2 | KorEduEng Fine-Tuning      | 8.0   | Fine-tuning with parameter tuning (variant 2)           |
